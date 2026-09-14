@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Вход - Конференции.РФ{% endblock %}
+
+{% block content %}
+<section class="auth-layout reveal">
+    <div class="auth-media">
+        <img src="{% static hero_image %}" alt="Пространство для конференций">
+        <div class="auth-media__caption">
+            <h1>Конференции.РФ</h1>
+            <p>Бронирование аудиторий, коворкингов и кинозалов для Всероссийских конференций.</p>
+        </div>
+    </div>
+
+    <div class="card auth-card">
+        <div class="card__header">
+            <h2>Авторизация</h2>
+            <p>Введите данные зарегистрированного пользователя.</p>
+        </div>
+        <form method="post" class="form">
+            {% csrf_token %}
+            <label class="field">
+                <span>Логин</span>
+                <input type="text" name="username" class="form-control" autocomplete="username" required>
+            </label>
+            <label class="field">
+                <span>Пароль</span>
+                <input type="password" name="password" class="form-control" autocomplete="current-password" required>
+            </label>
+            <button type="submit" class="btn btn-primary btn-wide">Войти</button>
+        </form>
+        <p class="form-note">Еще не зарегистрированы? <a href="{% url 'users:register' %}">Регистрация</a></p>
+    </div>
+</section>
+{% endblock %}
+

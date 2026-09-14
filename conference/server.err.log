@@ -1,0 +1,18 @@
+[13/Sep/2026 12:54:06] "GET /users/login/ HTTP/1.1" 200 2716
+[13/Sep/2026 12:54:15] "GET /users/login/ HTTP/1.1" 200 2716
+[13/Sep/2026 12:54:16] "GET /static/js/app.js HTTP/1.1" 200 2167
+[13/Sep/2026 12:54:16] "GET /static/img/media/1282150_png.webp HTTP/1.1" 200 7742
+[13/Sep/2026 12:54:16] "GET /static/img/media/yerinde-temizlik_jpg.webp HTTP/1.1" 200 62458
+[13/Sep/2026 12:54:16] "GET /static/css/style.css HTTP/1.1" 200 13287
+[13/Sep/2026 12:54:16] "GET /static/fonts/PT_Sans/PTSans-Regular.ttf HTTP/1.1" 200 278612
+[13/Sep/2026 12:54:16] "GET /static/fonts/PT_Sans/PTSans-Bold.ttf HTTP/1.1" 200 288340
+Not Found: /favicon.ico
+[13/Sep/2026 12:54:16] "GET /favicon.ico HTTP/1.1" 404 2449
+[13/Sep/2026 12:57:12] "GET /users/login/ HTTP/1.1" 200 2716
+[13/Sep/2026 12:57:12] "GET /static/css/style.css HTTP/1.1" 200 14003
+[13/Sep/2026 12:57:12] "GET /static/js/app.js HTTP/1.1" 304 0
+[13/Sep/2026 12:57:12] "GET /static/img/media/yerinde-temizlik_jpg.webp HTTP/1.1" 304 0
+[13/Sep/2026 12:57:12] "GET /static/img/media/1282150_png.webp HTTP/1.1" 304 0
+[13/Sep/2026 12:57:12] "GET /static/fonts/PT_Sans/PTSans-Bold.ttf HTTP/1.1" 304 0
+[13/Sep/2026 12:57:12] "GET /static/fonts/PT_Sans/PTSans-Regular.ttf HTTP/1.1" 304 0
+[13/Sep/2026 13:25:16,691] - Broken pipe from ('127.0.0.1', 54693)

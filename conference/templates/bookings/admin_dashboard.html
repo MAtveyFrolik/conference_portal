@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static booking_extras %}
+
+{% block title %}Панель администратора - Конференции.РФ{% endblock %}
+
+{% block content %}
+<section class="content-head reveal">
+    <div>
+        <h1>Панель администратора</h1>
+        <p>Просмотр, фильтрация и изменение статусов заявок.</p>
+    </div>
+    <a class="btn btn-secondary" href="{% url 'bookings:booking_list' %}">Мои заявки</a>
+</section>
+
+<section class="stats-grid reveal" aria-label="Статистика всех заявок">
+    <div class="stat"><strong>{{ stats.total }}</strong><span>Всего</span></div>
+    <div class="stat"><strong>{{ stats.new }}</strong><span>Новые</span></div>
+    <div class="stat"><strong>{{ stats.scheduled }}</strong><span>Назначены</span></div>
+    <div class="stat"><strong>{{ stats.completed }}</strong><span>Завершены</span></div>
+</section>
+
+<form method="get" class="filters card reveal">
+    <label class="field">
+        <span>Поиск</span>
+        <input type="search" name="q" value="{{ current_query }}" class="form-control" placeholder="ФИО, логин или email">
+    </label>
+    <label class="field">
+        <span>Статус</span>
+        <select name="status" class="form-select">
+            <option value="">Все статусы</option>
+            {% for value, label in status_choices %}
+                <option value="{{ value }}" {% if current_status == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <label class="field">
+        <span>Помещение</span>
+        <select name="room" class="form-select">
+            <option value="">Все помещения</option>
+            {% for value, label in room_choices %}
+                <option value="{{ value }}" {% if current_room == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <button type="submit" class="btn btn-primary">Применить</button>
+    <a class="btn btn-secondary" href="{% url 'bookings:admin_dashboard' %}">Сбросить</a>
+</form>
+
+{% if bookings %}
+    <section class="admin-grid reveal">
+        {% for booking in bookings %}
+            <article class="card booking-card admin-card">
+                {% with image=booking.room_name|room_image %}
+                    <img class="booking-card__image" src="{% static image %}" alt="{{ booking.get_room_name_display }}">
+                {% endwith %}
+                <div class="booking-card__body">
+                    <div class="booking-card__top">
+                        <h2>#{{ booking.id }} {{ booking.get_room_name_display }}</h2>
+                        <span class="status {{ booking.status|status_class }}">{{ booking.get_status_display }}</span>
+                    </div>
+                    <dl class="meta-list">
+                        <div>
+                            <dt>Пользователь</dt>
+                            <dd>{{ booking.user.full_name }}</dd>
+                        </div>
+                        <div>
+                            <dt>Логин</dt>
+                            <dd>{{ booking.user.username }}</dd>
+                        </div>
+                        <div>
+                            <dt>Дата</dt>
+                            <dd>{{ booking.conference_date|date:"d.m.Y H:i" }}</dd>
+                        </div>
+                        <div>
+                            <dt>Оплата</dt>
+                            <dd>{{ booking.get_payment_method_display }}</dd>
+                        </div>
+                    </dl>
+                    {% if booking.review %}
+                        <div class="review-box">
+                            <strong>Отзыв пользователя</strong>
+                            <p>{{ booking.review }}</p>
+                        </div>
+                    {% endif %}
+                    {% if booking.status != "completed" %}
+                        <form method="post" class="status-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="booking_id" value="{{ booking.id }}">
+                            <label class="field">
+                                <span>Новый статус</span>
+                                <select name="status" class="form-select">
+                                    {% for value, label in status_choices %}
+                                        <option value="{{ value }}" {% if booking.status == value %}selected{% endif %}>{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                            <button type="submit" class="btn btn-primary">Обновить</button>
+                        </form>
+                    {% else %}
+                        <p class="muted-note">Заявка завершена.</p>
+                    {% endif %}
+                </div>
+            </article>
+        {% endfor %}
+    </section>
+{% else %}
+    <section class="empty-state reveal">
+        <img src="{% static 'img/media/ad4b1ceed37823f2225c0e7a_jpg.webp' %}" alt="Переговорная">
+        <div>
+            <h2>Заявки не найдены</h2>
+            <p>Измените фильтры или дождитесь новых заявок от пользователей.</p>
+        </div>
+    </section>
+{% endif %}
+{% endblock %}
+

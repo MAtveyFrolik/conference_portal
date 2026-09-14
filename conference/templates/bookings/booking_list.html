@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static booking_extras %}
+
+{% block title %}Мои заявки - Конференции.РФ{% endblock %}
+
+{% block content %}
+<section class="content-head reveal">
+    <div>
+        <h1>Мои заявки</h1>
+        <p>Отслеживайте бронирования и оставляйте отзыв после завершения мероприятия.</p>
+    </div>
+    <a class="btn btn-primary" href="{% url 'bookings:booking_form' %}">Новая заявка</a>
+</section>
+
+<section class="stats-grid reveal" aria-label="Статистика заявок">
+    <div class="stat"><strong>{{ stats.total }}</strong><span>Всего</span></div>
+    <div class="stat"><strong>{{ stats.new }}</strong><span>Новые</span></div>
+    <div class="stat"><strong>{{ stats.scheduled }}</strong><span>Назначены</span></div>
+    <div class="stat"><strong>{{ stats.completed }}</strong><span>Завершены</span></div>
+</section>
+
+{% if bookings %}
+    <section class="booking-grid reveal">
+        {% for booking in bookings %}
+            <article class="card booking-card">
+                {% with image=booking.room_name|room_image %}
+                    <img class="booking-card__image" src="{% static image %}" alt="{{ booking.get_room_name_display }}">
+                {% endwith %}
+                <div class="booking-card__body">
+                    <div class="booking-card__top">
+                        <h2>{{ booking.get_room_name_display }}</h2>
+                        <span class="status {{ booking.status|status_class }}">{{ booking.get_status_display }}</span>
+                    </div>
+                    <dl class="meta-list">
+                        <div>
+                            <dt>Дата</dt>
+                            <dd>{{ booking.conference_date|date:"d.m.Y H:i" }}</dd>
+                        </div>
+                        <div>
+                            <dt>Оплата</dt>
+                            <dd>{{ booking.get_payment_method_display }}</dd>
+                        </div>
+                        <div>
+                            <dt>Создана</dt>
+                            <dd>{{ booking.created_at|date:"d.m.Y H:i" }}</dd>
+                        </div>
+                    </dl>
+
+                    {% if booking.review %}
+                        <div class="review-box">
+                            <strong>Ваш отзыв</strong>
+                            <p>{{ booking.review }}</p>
+                        </div>
+                    {% elif booking.can_review %}
+                        <form method="post" class="review-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="review_id" value="{{ booking.id }}">
+                            <label class="field">
+                                <span>Отзыв о мероприятии</span>
+                                <textarea name="review" class="form-control" rows="3" maxlength="800" data-review-field required></textarea>
+                                <small data-review-count>0 / 800</small>
+                            </label>
+                            <button type="submit" class="btn btn-secondary">Добавить отзыв</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </article>
+        {% endfor %}
+    </section>
+{% else %}
+    <section class="empty-state reveal">
+        <img src="{% static 'img/media/praktik-nevskogo-spb-kovorkin_jpg.webp' %}" alt="План коворкинга">
+        <div>
+            <h2>Заявок пока нет</h2>
+            <p>Выберите подходящее помещение и отправьте первую заявку на рассмотрение.</p>
+            <a class="btn btn-primary" href="{% url 'bookings:booking_form' %}">Создать заявку</a>
+        </div>
+    </section>
+{% endif %}
+
+<section class="asset-strip reveal" aria-label="Галерея помещений">
+    {% for image in gallery_images %}
+        <figure>
+            <img src="{% static image.src %}" alt="{{ image.alt }}" loading="lazy">
+            <figcaption>{{ image.caption }}</figcaption>
+        </figure>
+    {% endfor %}
+</section>
+{% endblock %}
+

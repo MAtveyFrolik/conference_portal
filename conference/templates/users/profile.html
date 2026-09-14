@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Профиль - Конференции.РФ{% endblock %}
+
+{% block content %}
+<section class="content-head reveal">
+    <div>
+        <h1>Профиль пользователя</h1>
+        <p>Контактные данные и краткая статистика заявок.</p>
+    </div>
+    <a class="btn btn-primary" href="{% url 'bookings:booking_form' %}">Новая заявка</a>
+</section>
+
+<section class="dashboard-grid reveal">
+    <article class="card profile-card">
+        <div class="card__header">
+            <h2>{{ user.full_name }}</h2>
+            <p>{{ user.username }}</p>
+        </div>
+        <dl class="profile-list">
+            <div>
+                <dt>Телефон</dt>
+                <dd>{{ user.phone }}</dd>
+            </div>
+            <div>
+                <dt>Email</dt>
+                <dd>{{ user.email }}</dd>
+            </div>
+            <div>
+                <dt>Дата регистрации</dt>
+                <dd>{{ user.date_joined|date:"d.m.Y H:i" }}</dd>
+            </div>
+        </dl>
+    </article>
+
+    <article class="card">
+        <div class="card__header">
+            <h2>Статистика</h2>
+            <p>Состояние заявок в личном кабинете.</p>
+        </div>
+        <div class="stats-grid">
+            <div class="stat"><strong>{{ stats.total }}</strong><span>Всего</span></div>
+            <div class="stat"><strong>{{ stats.new }}</strong><span>Новые</span></div>
+            <div class="stat"><strong>{{ stats.scheduled }}</strong><span>Назначены</span></div>
+            <div class="stat"><strong>{{ stats.completed }}</strong><span>Завершены</span></div>
+        </div>
+    </article>
+</section>
+{% endblock %}
+

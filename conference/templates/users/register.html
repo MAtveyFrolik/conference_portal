@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Регистрация - Конференции.РФ{% endblock %}
+
+{% block content %}
+<section class="auth-layout reveal">
+    <div class="auth-media">
+        <img src="{% static 'img/media/978e0d84d6b940fe1_jpg.webp' %}" alt="Современное пространство для встречи">
+        <div class="auth-media__caption">
+            <h1>Регистрация</h1>
+            <p>Создайте учетную запись, чтобы отправлять заявки и отслеживать их статусы.</p>
+        </div>
+    </div>
+
+    <div class="card auth-card auth-card--wide">
+        <div class="card__header">
+            <h2>Создать пользователя</h2>
+            <p>Все поля обязательны для заполнения.</p>
+        </div>
+        <form method="post" class="form">
+            {% csrf_token %}
+            {% for field in form %}
+                <label class="field" for="{{ field.id_for_label }}">
+                    <span>{{ field.label }}</span>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <small>{{ field.help_text }}</small>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <strong class="field-error">{{ error }}</strong>
+                    {% endfor %}
+                </label>
+            {% endfor %}
+            {% if form.non_field_errors %}
+                <div class="form-errors">{{ form.non_field_errors }}</div>
+            {% endif %}
+            <button type="submit" class="btn btn-primary btn-wide">Зарегистрироваться</button>
+        </form>
+        <p class="form-note">Уже зарегистрированы? <a href="{% url 'users:login' %}">Войти</a></p>
+    </div>
+</section>
+{% endblock %}
+

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Новая заявка - Конференции.РФ{% endblock %}
+
+{% block content %}
+<section class="content-head reveal">
+    <div>
+        <h1>Новая заявка</h1>
+        <p>Выберите помещение, дату начала конференции и удобный способ оплаты.</p>
+    </div>
+    <a class="btn btn-secondary" href="{% url 'bookings:booking_list' %}">Мои заявки</a>
+</section>
+
+<section class="form-layout reveal">
+    <div class="card">
+        <div class="card__header">
+            <h2>Форма бронирования</h2>
+            <p>После отправки заявка получит статус «Новая».</p>
+        </div>
+        <form method="post" class="form">
+            {% csrf_token %}
+            {% for field in form %}
+                <label class="field" for="{{ field.id_for_label }}">
+                    <span>{{ field.label }}</span>
+                    {{ field }}
+                    {% for error in field.errors %}
+                        <strong class="field-error">{{ error }}</strong>
+                    {% endfor %}
+                </label>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary btn-wide">Отправить заявку</button>
+        </form>
+    </div>
+
+    <aside class="room-preview">
+        {% for room in room_cards %}
+            <article class="room-tile" data-room-tile="{{ room.value }}">
+                <img src="{% static room.image %}" alt="{{ room.title }}">
+                <div>
+                    <h3>{{ room.title }}</h3>
+                    <p>{{ room.text }}</p>
+                </div>
+            </article>
+        {% endfor %}
+    </aside>
+</section>
+{% endblock %}
+
